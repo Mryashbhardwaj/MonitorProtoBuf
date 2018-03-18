@@ -3,22 +3,22 @@ from concurrent import futures
 import time
 
 # import the generated classes
-import calculator_pb2
-import calculator_pb2_grpc
+import monitor_pb2
+import monitor_pb2_grpc
 
 # import the original calculator.py
-import calculator
+import cpulib
 
 # create a class to define the server functions, derived from
 # calculator_pb2_grpc.CalculatorServicer
-class CalculatorServicer(calculator_pb2_grpc.CalculatorServicer):
+class MachineMonitorServicer( monitor_pb2_grpc.MachineMonitorServicer):
 
     # calculator.square_root is exposed here
     # the request and response are of the data type
     # calculator_pb2.Number
-    def SquareRoot(self, request, context):
-        response = calculator_pb2.Number()
-        response.value = calculator.square_root(request.value)
+    def checkCpu(self, request, context):
+        response = monitor_pb2.Response()
+        response.answer = cpulib.checkCpu(request.value)
         return response
 
 
@@ -27,8 +27,8 @@ server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
 # use the generated function `add_CalculatorServicer_to_server`
 # to add the defined class to the server
-calculator_pb2_grpc.add_CalculatorServicer_to_server(
-        CalculatorServicer(), server)
+monitor_pb2_grpc.add_MachineMonitorServicer_to_server(
+        MachineMonitorServicer(), server)
 
 # listen on port 50051
 print('Starting server. Listening on port 50051.')
