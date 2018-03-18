@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+message CpuLoad {
+    float value = 1;
+}
+
+message Response {
+    string answer = 1;
+}
+
+
+service MachineMonitor {
+    rpc checkCpu ( CpuLoad ) returns ( Response ) {}
+//    rpc checkMemory ( CpuLoad ) returns ( Response ) {}
+}
